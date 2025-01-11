@@ -59,4 +59,22 @@ public class Pedido {
                 '}';
     }
 
+    //Encapsulamiento, responsabilidad unica y reducción de dependecias
+    //Este metodo encápsula la lógica para calcular el total de un pedido
+    //Le asignamos la responsabilidad a la clase pedido
+    public BigDecimal getValorTotal(){
+        return precio.multiply(BigDecimal.valueOf(cantidad));
+    }
+
+    //Este metodo compara el costo total es menor a otro pedido
+    //Delegamos la responsabilidad a la clase correspondiente
+    public boolean isMasBaratoQue(Pedido otroPedido){
+        return this.getValorTotal().compareTo(otroPedido.getValorTotal()) < 0;
+    }
+
+    //Este metodo compara el costo total es mayor a otro pedido
+    //Delegamos la responsabilidad a la clase correspondiente
+    public boolean isMasCaroQue(Pedido otroPedido){
+        return this.getValorTotal().compareTo(otroPedido.getValorTotal()) > 0;
+    }
 }
