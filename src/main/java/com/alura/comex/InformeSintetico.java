@@ -3,8 +3,10 @@ package com.alura.comex;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class InformeSintetico {
     private final int totalDePedidosRealizados;
@@ -20,7 +22,9 @@ public class InformeSintetico {
         Pedido masBarato = null;
         Pedido masCaro = null;
 
-        CategoriasProcesadas categoriasProcesadas = new CategoriasProcesadas();
+        //Encapsulamos el cálculo y la representación del informe sintético, alineándolo con el Principio de
+        //Responsabilidad Única (SRP) y simplificando la clase Main.
+        Set<String> categoriasProcesadas = new HashSet<>();
 
         for (Pedido pedido : pedidos) {
             productosVendidos += pedido.getCantidad();
@@ -33,9 +37,7 @@ public class InformeSintetico {
                 masCaro = pedido;
             }
 
-            if (!categoriasProcesadas.contains(pedido.getCategoria())) {
-                categoriasProcesadas.add(pedido.getCategoria());
-            }
+            categoriasProcesadas.add(pedido.getCategoria());
         }
 
         this.totalDePedidosRealizados = pedidos.size();
