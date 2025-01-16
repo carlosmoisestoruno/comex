@@ -3,10 +3,9 @@ package com.alura.comex;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
-import java.util.HashSet;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class InformeSintetico {
     private final int totalDePedidosRealizados;
@@ -29,20 +28,14 @@ public class InformeSintetico {
         //Refactorizamos el calculo de total de categorias
         this.totalDeCategorias = calcularTotalDeCategorias(pedidos);
 
-        Pedido masBarato = null;
-        Pedido masCaro = null;
+        //Refactorizamos los cálculos del pedido más barato y pedido más caro
+        this.pedidoMasBarato = pedidos.stream()
+                .min(Comparator.comparing(Pedido::getValorTotal))
+                .orElse(null);
 
-        for (Pedido pedido : pedidos) {
-            if (masBarato == null || pedido.isMasBaratoQue(masBarato)) {
-                masBarato = pedido;
-            }
-            if (masCaro == null || pedido.isMasCaroQue(masCaro)) {
-                masCaro = pedido;
-            }
-        }
-
-        this.pedidoMasBarato = masBarato;
-        this.pedidoMasCaro = masCaro;
+        this.pedidoMasCaro = pedidos.stream()
+                .max(Comparator.comparing(Pedido::getValorTotal))
+                .orElse(null);
     }
 
     //Refactorizacion 1
