@@ -26,13 +26,11 @@ public class InformeSintetico {
         //Refactorizamos el monto de ventas
         this.montoDeVentas = calcularMontoDeVentas(pedidos);
 
-        BigDecimal montoVentas = BigDecimal.ZERO;
+        //Refactorizamos el calculo de total de categorias
+        this.totalDeCategorias = calcularTotalDeCategorias(pedidos);
+
         Pedido masBarato = null;
         Pedido masCaro = null;
-
-        //Encapsulamos el cálculo y la representación del informe sintético, alineándolo con el Principio de
-        //Responsabilidad Única (SRP) y simplificando la clase Main.
-        Set<String> categoriasProcesadas = new HashSet<>();
 
         for (Pedido pedido : pedidos) {
             if (masBarato == null || pedido.isMasBaratoQue(masBarato)) {
@@ -41,11 +39,8 @@ public class InformeSintetico {
             if (masCaro == null || pedido.isMasCaroQue(masCaro)) {
                 masCaro = pedido;
             }
-
-            categoriasProcesadas.add(pedido.getCategoria());
         }
 
-        this.totalDeCategorias = categoriasProcesadas.size();
         this.pedidoMasBarato = masBarato;
         this.pedidoMasCaro = masCaro;
     }
@@ -67,6 +62,14 @@ public class InformeSintetico {
         return pedidos.stream()
                 .map(Pedido::getValorTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    //Refactorizacion 4
+    private int calcularTotalDeCategorias(List<Pedido> pedidos) {
+        return (int) pedidos.stream()
+                .map(Pedido::getCategoria)
+                .distinct()
+                .count();
     }
 
     public int getTotalDePedidosRealizados() {
