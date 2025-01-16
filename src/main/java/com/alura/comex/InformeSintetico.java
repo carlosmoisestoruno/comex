@@ -19,7 +19,10 @@ public class InformeSintetico {
     public InformeSintetico(List<Pedido> pedidos) {
         //Refactorizamos el cálculo del indicador de "total de pedidos realizados"
         this.totalDePedidosRealizados = calcularTotalDePedidosRealizados(pedidos);
-        int productosVendidos = 0;
+
+        //Refactirizamos el cálculo del indicador del indicador de "total de productos vendidos"
+        this.totalDeProductosVendidos = calcularTotalDeProductosVendidos(pedidos);
+
         BigDecimal montoVentas = BigDecimal.ZERO;
         Pedido masBarato = null;
         Pedido masCaro = null;
@@ -29,7 +32,6 @@ public class InformeSintetico {
         Set<String> categoriasProcesadas = new HashSet<>();
 
         for (Pedido pedido : pedidos) {
-            productosVendidos += pedido.getCantidad();
             montoVentas = montoVentas.add(pedido.getValorTotal());
 
             if (masBarato == null || pedido.isMasBaratoQue(masBarato)) {
@@ -42,7 +44,6 @@ public class InformeSintetico {
             categoriasProcesadas.add(pedido.getCategoria());
         }
 
-        this.totalDeProductosVendidos = productosVendidos;
         this.totalDeCategorias = categoriasProcesadas.size();
         this.montoDeVentas = montoVentas;
         this.pedidoMasBarato = masBarato;
@@ -51,6 +52,12 @@ public class InformeSintetico {
 
     private int calcularTotalDePedidosRealizados(List<Pedido> pedidos) {
         return pedidos.size();
+    }
+
+    private int calcularTotalDeProductosVendidos(List<Pedido> pedidos) {
+        return pedidos.stream()
+                .mapToInt(Pedido::getCantidad)
+                .sum();
     }
 
     public int getTotalDePedidosRealizados() {
