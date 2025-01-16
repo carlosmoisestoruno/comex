@@ -17,6 +17,8 @@ public class InformeSintetico {
     private final Pedido pedidoMasCaro;
 
     public InformeSintetico(List<Pedido> pedidos) {
+        //Refactorizamos el cálculo del indicador de "total de pedidos realizados"
+        this.totalDePedidosRealizados = calcularTotalDePedidosRealizados(pedidos);
         int productosVendidos = 0;
         BigDecimal montoVentas = BigDecimal.ZERO;
         Pedido masBarato = null;
@@ -40,12 +42,15 @@ public class InformeSintetico {
             categoriasProcesadas.add(pedido.getCategoria());
         }
 
-        this.totalDePedidosRealizados = pedidos.size();
         this.totalDeProductosVendidos = productosVendidos;
         this.totalDeCategorias = categoriasProcesadas.size();
         this.montoDeVentas = montoVentas;
         this.pedidoMasBarato = masBarato;
         this.pedidoMasCaro = masCaro;
+    }
+
+    private int calcularTotalDePedidosRealizados(List<Pedido> pedidos) {
+        return pedidos.size();
     }
 
     public int getTotalDePedidosRealizados() {
