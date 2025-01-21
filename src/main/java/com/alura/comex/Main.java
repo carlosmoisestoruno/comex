@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -50,8 +51,25 @@ public class Main {
                 throw new RuntimeException("Error al abrir Scanner para procesar archivo!");
             }
 
-        // Crear y utilizar la clase InformeSintetico para asignar responsabilidades unicas
+        // Generar informe sintético
         InformeSintetico informe = new InformeSintetico(pedidos);
-        informe.imprimirInforme();
+        //imprimirInformeSintetico(informe);
+
+        // Generar informe de clientes fieles
+        generarInformeClientesFieles(pedidos);
     }
+
+    private static void generarInformeClientesFieles(List<Pedido> pedidos) {
+        System.out.println("#### INFORME DE CLIENTES FIELES");
+
+        pedidos.stream()
+                .collect(Collectors.groupingBy(Pedido::getCliente, Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.comparingByKey())
+                .forEach(entry -> {
+                    System.out.printf("NOMBRE: %s\nNº DE PEDIDOS: %d\n\n", entry.getKey(), entry.getValue());
+                });
+    }
+
 }
